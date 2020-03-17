@@ -1,6 +1,6 @@
 //https://www.youtube.com/watch?v=iZx7hqHb5MU
 
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import { random } from 'lodash';
 import 'typeface-roboto';
 import Grid from '@material-ui/core/Grid';
@@ -16,78 +16,87 @@ const styles = {
   }
 };
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      quotes: [],
-      selectedQuoteIndex: null
-    };
-    this.generateNewQuoteIndex = this.generateNewQuoteIndex.bind(this);
-    this.assignNewQuoteIndex = this.assignNewQuoteIndex.bind(this);
-  }
-  componentDidMount() {
-    fetch(
-      'https://gist.githubusercontent.com/natebass/b0a548425a73bdf8ea5c618149fe1fce/raw/f4231cd5961f026264bb6bb3a6c41671b044f1f4/quotes.json'
-    )
-      .then(res => res.json())
-      .then(data =>
-        this.setState(
-          {
-            quotes: data
-          },
-          this.assignNewQuoteIndex
-        )
-      );
-  }
+function App({ classes }) {
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {
+  //     quotes: [],
+  //     selectedQuoteIndex: null
+  //   };
+  //   this.generateNewQuoteIndex = this.generateNewQuoteIndex.bind(this);
+  //   this.assignNewQuoteIndex = this.assignNewQuoteIndex.bind(this);
+  // }
 
-  get selectedQuote() {
-    if (
-      !this.state.quotes.length ||
-      !Number.isInteger(this.state.selectedQuoteIndex)
-    ) {
+  const [quotes, setQuotes] = useState([]);
+  const [selectedQuoteIndex, setSelectedQuoteIndex] = useState(null);
+
+  // componentDidMount() {
+  //   fetch(
+  //     'https://gist.githubusercontent.com/natebass/b0a548425a73bdf8ea5c618149fe1fce/raw/f4231cd5961f026264bb6bb3a6c41671b044f1f4/quotes.json'
+  //   )
+  //     .then(res => res.json())
+  //     .then(data =>
+  //       this.setState(
+  //         {
+  //           quotes: data
+  //         },
+  //         this.assignNewQuoteIndex
+  //       )
+  //     );
+  // }
+
+  useEffect(() => {
+    async function fetchData() {
+      const data = await fetch(
+        'https://gist.githubusercontent.com/natebass/b0a548425a73bdf8ea5c618149fe1fce/raw/f4231cd5961f026264bb6bb3a6c41671b044f1f4/quotes.json'
+      );
+      const quotes = await data.json();
+      setQuotes(quotes);
+      setSelectedQuoteIndex(random(0, quotes.length - 1));
+    }
+    fetchData();
+  }, []);
+
+  function getSelectedQuote() {
+    if (!quotes.length || !Number.isInteger(selectedQuoteIndex)) {
       return undefined;
     }
-    return this.state.quotes[this.state.selectedQuoteIndex];
+    return quotes[selectedQuoteIndex];
   }
   /**
    * Returns an integer between 0 and 102 representing an index in state.quotes
    **/
-  generateNewQuoteIndex = () => {
-    if (!this.state.quotes.length) {
+  function generateNewQuoteIndex() {
+    if (!quotes.length) {
       return undefined;
     }
-    return random(0, this.state.quotes.length - 1);
-  };
+    return random(0, quotes.length - 1);
+  }
 
   /**
    * Sets the state for selectedQuoteIndex
    **/
-  assignNewQuoteIndex() {
-    this.setState({
-      selectedQuoteIndex: this.generateNewQuoteIndex()
-    });
+  function assignNewQuoteIndex() {
+    setSelectedQuoteIndex(generateNewQuoteIndex());
   }
 
-  render() {
-    return (
-      <Grid
-        className={this.props.classes.container}
-        id="quote-box"
-        justify="center"
-        container
-      >
-        <Grid xs={11} large={8} item>
-          {this.selectedQuote ? (
-            <QuoteMachine
-              selectedQuote={this.selectedQuote}
-              assignNewQuoteIndex={this.assignNewQuoteIndex}
-            />
-          ) : null}
-        </Grid>
+  return (
+    <Grid
+      className={classes.container}
+      id="quote-box"
+      justify="center"
+      container
+    >
+      <Grid xs={11} large={8} item>
+        {getSelectedQuote() ? (
+          <QuoteMachine
+            selectedQuote={getSelectedQuote()}
+            assignNewQuoteIndex={assignNewQuoteIndex}
+          />
+        ) : null}
       </Grid>
-    );
-  }
+    </Grid>
+  );
 }
 
 export default withStyles(styles)(App);
