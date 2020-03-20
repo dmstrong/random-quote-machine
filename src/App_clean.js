@@ -17,34 +17,9 @@ const styles = {
 };
 
 function App({ classes }) {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     quotes: [],
-  //     selectedQuoteIndex: null
-  //   };
-  //   this.generateNewQuoteIndex = this.generateNewQuoteIndex.bind(this);
-  //   this.assignNewQuoteIndex = this.assignNewQuoteIndex.bind(this);
-  // }
-
   const [quotes, setQuotes] = useState([]);
   const [selectedQuoteIndex, setSelectedQuoteIndex] = useState(null);
   const [colorHolder, setColorHolder] = useState('black');
-
-  // componentDidMount() {
-  //   fetch(
-  //     'https://gist.githubusercontent.com/natebass/b0a548425a73bdf8ea5c618149fe1fce/raw/f4231cd5961f026264bb6bb3a6c41671b044f1f4/quotes.json'
-  //   )
-  //     .then(res => res.json())
-  //     .then(data =>
-  //       this.setState(
-  //         {
-  //           quotes: data
-  //         },
-  //         this.assignNewQuoteIndex
-  //       )
-  //     );
-  // }
 
   useEffect(() => {
     async function fetchData() {
@@ -75,7 +50,7 @@ function App({ classes }) {
   }
 
   /**
-   * Sets the state for selectedQuoteIndex
+   * Assigns a random background color for (container and button) and Sets the state for selectedQuoteIndex
    **/
   function assignNewQuoteIndex() {
     const colorCode =

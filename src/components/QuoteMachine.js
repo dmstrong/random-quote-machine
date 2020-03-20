@@ -14,15 +14,25 @@ const QuoteMachine = props => (
     <CardContent>
       <Typography>
         <span id="text">{props.selectedQuote.quote}</span>
-        <span id="author"> -{props.selectedQuote.author}</span>
+        <span id="author"> - {props.selectedQuote.author}</span>
       </Typography>
     </CardContent>
     <CardActions>
-      <Button size="small" onClick={props.assignNewQuoteIndex} id="new-quote">
+      <Button
+        style={{
+          backgroundColor: props.colorHolder,
+          color: 'white'
+        }}
+        size="small"
+        onClick={props.assignNewQuoteIndex}
+        id="new-quote"
+      >
         Next Quote
       </Button>
       <IconButton
-        href={encodeURI(`https://twitter.com/intent/tweet?text=${props.selectedQuote.quote} - ${props.selectedQuote.author}&hashtags=CodingIsMyLife`)}
+        href={encodeURI(
+          `https://twitter.com/intent/tweet?text=${props.selectedQuote.quote} - ${props.selectedQuote.author}&hashtags=CodingIsMyLife`
+        )}
         target="_blank"
         id="tweet-quote"
       >
