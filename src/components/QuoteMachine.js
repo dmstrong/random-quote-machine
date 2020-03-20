@@ -21,7 +21,8 @@ const QuoteMachine = props => (
       <Button
         style={{
           backgroundColor: props.colorHolder,
-          color: 'white'
+          color: '#fff',
+          textShadow: '.5px .5px #707070'
         }}
         size="small"
         onClick={props.assignNewQuoteIndex}
